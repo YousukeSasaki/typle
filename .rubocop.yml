@@ -1,0 +1,92 @@
+# This file overrides https://github.com/bbatsov/rubocop/blob/master/config/default.yml
+
+# 日本語でのコメントを許可
+Style/AsciiComments:
+  Enabled: false
+
+# 複数行での「lambda」で「->」による省略記法を許可
+Style/Lambda:
+  Enabled: false
+
+# モジュール名::クラス名の定義を許可
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+# メソッド名のprefixに「set_」「get_」を許可
+Naming/AccessorMethodName:
+  Enabled: false
+
+# 「and」「or」の使用を許可
+Style/AndOr:
+  Enabled: false
+
+# ネストが深すぎる
+Metrics/BlockNesting:
+  Max: 5
+
+# クラスの行数が多すぎる
+Metrics/ClassLength:
+  Enabled: false
+
+# 循環的複雑度が高すぎる(ifやforなどを1メソッド内で使いすぎている)
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+# 例外を抑制している
+# SuppressedException:
+#   Enabled: false
+
+# 引数の数が多すぎる
+Metrics/ParameterLists:
+  Max: 12
+
+# "Missing top-level class documentation comment."を無効
+Style/Documentation:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: true
+  Max: 30
+
+# Use UTF-8 as the source file encoding.
+Style/Encoding:
+  Enabled: false
+
+# Favor modifier if/unless usage when you have a single-line body.
+Style/IfUnlessModifier:
+  Enabled: false
+
+# Favor modifier while/until usage when you have a single-line body.
+Style/WhileUntilModifier:
+  Enabled: false
+
+# Preferred collection methods.
+Style/CollectionMethods:
+  Enabled: false
+
+# Avoid Perl-style regex back references.
+Style/PerlBackrefs:
+  Enabled: false
+
+# Don't interpolate global, instance and class variables directly in strings.
+Style/VariableInterpolation:
+  Enabled: false
+
+# Don't use semicolons to terminate expressions.
+Style/Semicolon:
+  AllowAsExpressionSeparator: false
+
+# TODO: Change it to true when $redis and $mixpanel is removed
+#
+# Do not introduce global variables.
+Style/GlobalVars:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+AllCops:
+  NewCops: enable
+
+Style/SymbolArray:
+  Enabled: false
