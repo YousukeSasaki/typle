@@ -16,6 +16,7 @@ end
 
 create_table "genres", id: :bigint, unsigned: true, comment: "ジャンル", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
   t.string "name", null: false
+  t.string "value", null: false
   t.integer "sort_num"
   t.datetime "updated_at", null: false
   t.datetime "created_at", null: false
