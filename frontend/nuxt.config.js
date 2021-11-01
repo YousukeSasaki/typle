@@ -43,20 +43,14 @@ export default {
     '@nuxtjs/axios'
   ],
   /*
-   ** Axios module configuration
-   ** See https://axios.nuxtjs.org/options
-   */
-  axios: {},
-  /*
    ** vuetify module configuration
    ** https://github.com/nuxt-community/vuetify-module
    */
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: true,
       themes: {
-        dark: {
+        light: {
           primary: colors.blue.darken2,
           accent: colors.grey.darken3,
           secondary: colors.amber.darken3,
@@ -64,6 +58,7 @@ export default {
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,
           success: colors.green.accent3
+          // anchor: メインカラーをいずれ設定する
         }
       }
     }
@@ -83,12 +78,21 @@ export default {
     host: '0.0.0.0'
   },
 
+  /*
+   ** Axios module configuration
+   ** See https://axios.nuxtjs.org/options
+   */
+  axios: {
+    prefix: '/api',
+    proxy: true,
+  },
+  
   proxy: {
     '/api': {
-      target: 'http://localhost:3000/'
-      // pathRewrite: {
-      //   '^/api': '/api/v1/',
-      // },
+      target: 'http://docker.for.mac.localhost:5000',
+      pathRewrite: {
+        '^/api/': '/api/v1/',
+      },
     }
   }
 }

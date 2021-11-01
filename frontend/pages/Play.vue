@@ -1,25 +1,26 @@
 <template>
   <div class="text-center">
-    <PlayComponent ref="PlayComponent" :genre="genre"></PlayComponent>
+    <PlayComponent ref="PlayComponent" :genre="selectedGenre"></PlayComponent>
     <v-dialog v-model="dialog" width="500" persistent>
       <v-card>
         <v-card-title class="headline grey lighten-2 justify-center">
           ジャンル選択
         </v-card-title>
 
-        <v-btn-toggle v-model="genre" class="d-block mt-6">
+        <v-btn-toggle v-model="selectedGenre" class="d-block mt-6">
           <v-card-text class="pt-3">
             <v-container>
               <v-row align="center" no-gutters>
-                <v-col cols="12" md="6" class="mb-6 px-3">
-                  <v-btn class="btn btn-engineer" value="engineer">
-                    <span>エンジニア</span>
-                  </v-btn>
-                </v-col>
-
-                <v-col cols="12" md="6" class="mb-6 px-3">
-                  <v-btn class="btn btn-general" value="general">
-                    <span>一般</span>
+                <v-col
+                  v-for="genre in genres"
+                  :key="genre.value"
+                  cols="12" md="6" class="mb-6 px-3"
+                >
+                  <v-btn
+                    class="btn"
+                    :class="`btn-${genre.value}`"
+                    :value="genre.value">
+                    <span>{{ genre.name }}</span>
                   </v-btn>
                 </v-col>
               </v-row>
@@ -58,19 +59,32 @@ export default {
   },
   data() {
     return {
+      genres: [],
       dialog: true,
-      genre: "",
+      selectedGenre: "",
       disabled: true
     };
   },
   watch: {
-    genre(v) {
+    selectedGenre(v) {
       if (v) {
         this.disabled = false;
       } else {
         this.disabled = true;
       }
     }
+  },
+  created() {
+    this.$axios.$get('/genres')
+      .then((res) => {
+        const genres = JSON.parse(res.data)
+        genres.forEach((genre, i) => {
+          this.genres.push(genre)
+        })
+      })
+      .catch((err) => {
+          console.log('エラーが発生しました', err)
+      })
   },
   methods: {
     submitGenre() {

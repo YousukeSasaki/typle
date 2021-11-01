@@ -50,7 +50,7 @@ export default {
   props: {
     genre: {
       type: String,
-      default: 'engineer'
+      required: true
     }
   },
   data() {
@@ -120,20 +120,15 @@ export default {
       }, 1000)
     },
     getQuestions() {
-      db.collection('questions')
-        .doc('genre')
-        .collection(this.genre)
-        .get()
-        .then((snapshot) => {
-          this.allQuestionsLength = snapshot.size
-          let i = 0
-          snapshot.forEach((doc) => {
+      this.$axios.$get('/questions')
+        .then((res) => {
+          const questions = JSON.parse(res.data)
+          questions.forEach((question, i) => {
             if (i === 0) {
-              this.setQuestions(doc.data())
+              this.setQuestions(question)
             } else {
-              this.stockQuestionArr.push(doc.data())
+              this.stockQuestionArr.push(question)
             }
-            i++
           })
         })
         .catch((err) => {
@@ -452,14 +447,20 @@ export default {
 }
 .input-line {
   margin-bottom: 30px;
+  font-size: 0;
   .prev {
     color: #909670;
+    font-size: 1.5rem;
   }
   .current {
     color: #ffffff;
+    padding-bottom: 3px;
+    border-bottom: 2px solid #ffffff;
+    font-size: 1.5rem;
   }
   .next {
     color: #ffffff;
+    font-size: 1.5rem;
   }
 }
 .result {
