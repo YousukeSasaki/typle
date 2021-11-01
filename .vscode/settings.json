@@ -7,5 +7,4 @@
     "activityBar.inactiveForeground": "#f0dddd",
     "activityBarBadge.background": "#000000"
   },
-  "ruby.rubocop.executePath": "/Users/sasaki/.rbenv/shims/",
 }
