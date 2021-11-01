@@ -19,7 +19,7 @@ services:
     container_name: typle_backend
     build: ./backend/
     image: typle_backend
-    command: bundle exec rails server -b 0.0.0.0
+    command: bundle exec rails server -p 5000 -b 0.0.0.0
     tty: true
     stdin_open: true
     volumes:
@@ -34,7 +34,7 @@ services:
     depends_on:
       - db
     ports:
-      - 5000:3000 # ポートフォワード
+      - 5000:5000
     networks:
       app_net:
         ipv4_address: '172.20.0.3'
@@ -45,6 +45,8 @@ services:
     image: typle_frontend
     volumes:
       - ./frontend:/app
+    depends_on:
+      - backend
     ports:
       - 8888:8888
     command: "npm run dev"
