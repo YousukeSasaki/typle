@@ -6,6 +6,7 @@
 create_table "questions", id: :bigint, unsigned: true, comment: "問題", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
   t.string "preview", default: "", null: false
   t.string "kana", default: "", null: false
+  t.integer "kana_length", default: 0, null: false
   t.integer "request_id"
   t.integer "user_id"
   t.integer "genre_id"

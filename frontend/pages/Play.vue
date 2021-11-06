@@ -88,7 +88,7 @@ export default {
   },
   methods: {
     submitGenre() {
-      if (this.genre !== "") {
+      if (this.selectedGenre !== '') {
         this.$refs.PlayComponent.initMethods();
         this.dialog = false;
       }
