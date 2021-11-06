@@ -8,7 +8,7 @@
       <div :class="[$style.timer, $style.second]"></div>
       <p :class="$style['timer-number']">{{ passSec }}</p>
       <div :class="$style['inner-wrapper']">
-        <p :class="$style.question">{{ question }}</p>
+        <p :class="$style.question">{{ preview }}</p>
         <p :class="$style['input-line']">
           <span :class="$style.prev">{{ prev }}</span>
           <span :class="$style.current">{{ current }}</span>
@@ -19,7 +19,11 @@
             <v-icon dark left>
               mdi-circle-outline
             </v-icon>
-            <span>{{ correctKeyCount }}</span>
+            <span>{{ correctKeyCountNormal }}</span>
+            <v-icon dark left>
+              mdi-star-circle
+            </v-icon>
+            <span>{{ correctKeyCountBonus }}</span>
           </p>
           <p :class="$style.result">
             <v-icon dark left>
@@ -29,28 +33,27 @@
           </p>
         </div>
 
-        <p :class="$style.result">正確率: {{ correctRate }}</p>
+        <p :class="$style.result">正確率: {{ correctRate * 100 }}%</p>
+        <p :class="$style.result">平均タイプ数: {{ kps }}回/秒</p>
+        <p :class="$style.result">スコア: {{ score }}</p>
       </div>
     </div>
     <div v-if="showingPage === 'result'" :class="$style['wide-wrapper']">
-      <p :class="$style.result">正解タイプ数: {{ correctKeyCount }}</p>
+      <p :class="$style.result">正解タイプ数: {{ totalCorrectKeyCount }}</p>
       <p :class="$style.result">ミスタイプ数: {{ wrongKeyCount }}</p>
-      <p :class="$style.result">正確率: {{ correctRate }}</p>
+      <p :class="$style.result">正確率: {{ correctRate * 100 }}%</p>
+      <p :class="$style.result">平均タイプ数: {{ kps }}回/秒</p>
+      <p :class="$style.result">スコア: {{ score }}</p>
     </div>
   </div>
 </template>
 
 <script>
-// import firebase from "firebase";
-// import "firebase/firestore";
-
-// const db = firebase.firestore();
 
 export default {
   props: {
     genre: {
-      type: String,
-      required: true
+      type: String
     }
   },
   data() {
@@ -61,28 +64,47 @@ export default {
       eventListeners: {},
       countDownThreeObj: null,
       timerObj: null,
-      correctKeyCount: 0,
-      wrongKeyCount: 0,
+      correctKeyCountNormal: 0, // の正解キータイプ数(通常問題)
+      correctKeyCountBonus: 0, // 正解キータイプ数(ボーナス問題)
+      wrongKeyCount: 0, // 不正解キータイプ数
       stockQuestionArr: [],
       kanaArr: [], // 平仮名を１文字ずつ配列に格納
       romanArr: [], // ローマ字を平仮名ごとに配列に格納
       previewArr: [], // 画面に表示されるローマ字を配列に格納
       inputKey: '',
-      question: '',
+      currentQuestion: null,
+      preview: '',
       prev: '',
       current: '',
       next: '',
       countDownNumber: 3,
-      passSec: 60
+      passSec: 600
     }
   },
   computed: {
+    totalCorrectKeyCount() {
+      return this.correctKeyCountNormal + this.correctKeyCountBonus
+    },
+    totalKeyCount() {
+      return this.correctKeyCountNormal + this.correctKeyCountBonus + this.wrongKeyCount
+    },
     correctRate() {
-      const totalKeyCount = this.correctKeyCount + this.wrongKeyCount
-      if (totalKeyCount === 0) {
-        return '--'
+      if (this.totalKeyCount === 0) {
+        return 0
       }
-      return ((this.correctKeyCount * 100) / totalKeyCount).toFixed(1) + '%'
+      return this.totalCorrectKeyCount / this.totalKeyCount
+    },
+    kps() {
+      if ((this.totalCorrectKeyCount) === 0) {
+        return 0
+      }
+      return (this.totalCorrectKeyCount / (600 - this.passSec)).toFixed(1)
+    },
+    score() {
+      if (this.correctRate === 0) {
+        return 0
+      }
+      return Math.floor((this.correctKeyCountNormal * 10 + this.correctKeyCountBonus * 20) * this.correctRate)
     }
   },
   watch: {
@@ -120,13 +142,19 @@ export default {
       }, 1000)
     },
     getQuestions() {
-      this.$axios.$get('/questions')
+      this.$axios.$get('/questions', { params: { genre: this.genre } })
         .then((res) => {
           const questions = JSON.parse(res.data)
           questions.forEach((question, i) => {
             if (i === 0) {
               this.setQuestions(question)
+            } else if ([1, 2].includes(i)) {
+              question.bonus = false
+              this.stockQuestionArr.push(question)
             } else {
+              // 0〜3の中からランダムで数値を取得し、1/4の確率でボーナス問題とする
+              const rand = Math.floor(Math.random() * 4)
+              question.bonus = rand === 0
               this.stockQuestionArr.push(question)
             }
           })
@@ -143,9 +171,10 @@ export default {
       }, 1000)
       window.addEventListener('keypress', this.eventListeners.inputKeyEvent)
     },
-    setQuestions(row) {
-      this.question = row.preview
-      this.kanaSplit(row.kana)
+    setQuestions(question) {
+      this.currentQuestion = question
+      this.preview = question.preview
+      this.kanaSplit(question.kana)
       this.translateToRoman()
       this.initialCurrentQuestion()
     },
@@ -377,7 +406,11 @@ export default {
           this.setQuestions(this.stockQuestionArr[0])
           this.stockQuestionArr.shift()
         }
-        this.correctKeyCount++
+        if (this.currentQuestion.bonus) {
+          this.correctKeyCountBonus++
+        } else {
+          this.correctKeyCountNormal++
+        }
       } else {
         this.wrongKeyCount++
       }
@@ -446,6 +479,7 @@ export default {
   margin-bottom: 30px;
 }
 .input-line {
+  font-family: 'Roboto Mono', monospace;
   margin-bottom: 30px;
   font-size: 0;
   .prev {
