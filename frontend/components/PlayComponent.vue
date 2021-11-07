@@ -49,6 +49,15 @@
 </template>
 
 <script>
+import { Howl, Howler } from 'howler';
+import correct01 from '@/assets/sound/correct01.mp3'
+import correct02 from '@/assets/sound/correct02.mp3'
+import correct03 from '@/assets/sound/correct03.mp3'
+import correct04 from '@/assets/sound/correct04.mp3'
+import wrong01 from '@/assets/sound/wrong01.mp3'
+import wrong02 from '@/assets/sound/wrong02.mp3'
+import wrong03 from '@/assets/sound/wrong03.mp3'
+import wrong04 from '@/assets/sound/wrong04.mp3'
 
 export default {
   props: {
@@ -78,7 +87,9 @@ export default {
       current: '',
       next: '',
       countDownNumber: 3,
-      passSec: 600
+      passSec: 600,
+      correctSound: correct02,
+      wrongSound: wrong02
     }
   },
   computed: {
@@ -117,10 +128,7 @@ export default {
     },
     passSec(v) {
       if (v === 0) {
-        window.removeEventListener(
-          'keypress',
-          this.eventListeners.inputKeyEvent
-        )
+        window.removeEventListener('keypress', this.eventListeners.inputKeyEvent)
         clearInterval(this.timerObj)
         this.showingPage = 'result'
       }
@@ -177,6 +185,18 @@ export default {
       this.kanaSplit(question.kana)
       this.translateToRoman()
       this.initialCurrentQuestion()
+    },
+    correct() {
+      const sound = new Howl({
+        src: this.correctSound
+      })
+      sound.play()
+    },
+    wrong() {
+      const sound = new Howl({
+        src: this.wrongSound
+      })
+      sound.play()
     },
     kanaSplit(kana) {
       let i = 0
@@ -373,6 +393,7 @@ export default {
         })
       }
       if (isCorrect) {
+        this.correct()
         let i = 0
         while (i < curArr.length) {
           if (this.inputKey === curArr[i][0]) {
@@ -412,6 +433,7 @@ export default {
           this.correctKeyCountNormal++
         }
       } else {
+        this.wrong()
         this.wrongKeyCount++
       }
     }

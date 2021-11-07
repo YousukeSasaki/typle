@@ -48,6 +48,7 @@ export default {
    */
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
+    treeShake: true,
     theme: {
       themes: {
         light: {
@@ -67,10 +68,25 @@ export default {
    ** Build configuration
    */
   build: {
+    loaders: {
+      vue: {
+        transformAssetUrls: {
+          audio: 'src',
+        },
+      },
+    },
     /*
      ** You can extend webpack config here
      */
-    extend(config, ctx) {}
+    extend(config, ctx) {
+      config.module.rules.push({
+        test: /\.(ogg|mp3|wav|mpe?g)$/i,
+        loader: 'file-loader',
+        options: {
+          name: '[path][name].[ext]',
+        },
+      })
+    }
   },
 
   server: {
