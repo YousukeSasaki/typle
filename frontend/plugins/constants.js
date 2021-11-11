@@ -105,6 +105,7 @@ const dictionary = [
   { kana: 'とぅ', alp: ['twu'] },
   { kana: 'でぃ', alp: ['dhi'] },
   { kana: 'でゅ', alp: ['dhu'] },
+  { kana: 'どぅ', alp: ['dwu'] },
   { kana: 'にゃ', alp: ['nya'] },
   { kana: 'にゅ', alp: ['nyu'] },
   { kana: 'にょ', alp: ['nyo'] },
@@ -157,6 +158,7 @@ const dictionary = [
   { kana: '）', alp: [')'] }
 ]
 
+// 後ろに続くと"n"1文字で入力できない文字
 const invalidSingleN = [
   'あ',
   'い',
@@ -183,9 +185,34 @@ const genreList = [
 
 const genreListWithAll = [{ ja: '全て', en: 'all' }, ...genreList]
 
+// sounds
+import correct01 from '@/assets/sound/correct01.mp3'
+import correct02 from '@/assets/sound/correct02.mp3'
+import correct03 from '@/assets/sound/correct03.mp3'
+import correct04 from '@/assets/sound/correct04.mp3'
+import wrong01 from '@/assets/sound/wrong01.mp3'
+import wrong02 from '@/assets/sound/wrong02.mp3'
+import wrong03 from '@/assets/sound/wrong03.mp3'
+import wrong04 from '@/assets/sound/wrong04.mp3'
+
+const CORRECT_SOUNDS = [
+  { name: 'correct01', label: 'タイプ音１', src: correct01 },
+  { name: 'correct02', label: 'タイプ音２', src: correct02 },
+  { name: 'correct03', label: 'タイプ音３', src: correct03 },
+  { name: 'correct04', label: 'タイプ音４', src: correct04 }
+]
+const WRONG_SOUNDS = [
+  { name: 'wrong01', label: 'ミス音１', src: wrong01 },
+  { name: 'wrong02', label: 'ミス音２', src: wrong02 },
+  { name: 'wrong03', label: 'ミス音３', src: wrong03 },
+  { name: 'wrong04', label: 'ミス音４', src: wrong04 }
+]
+
 export default (_, inject) => {
   inject('dictionary', dictionary)
   inject('invalidSingleN', invalidSingleN)
   inject('genreList', genreList)
   inject('genreListWithAll', genreListWithAll)
+  inject('CORRECT_SOUNDS', CORRECT_SOUNDS)
+  inject('WRONG_SOUNDS', WRONG_SOUNDS)
 }
