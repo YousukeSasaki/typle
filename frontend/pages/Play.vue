@@ -1,10 +1,22 @@
 <template>
   <div class="text-center">
     <PlayComponent ref="PlayComponent" :genre="selectedGenre"></PlayComponent>
-    <v-dialog v-model="dialog" width="500" persistent>
+    <v-dialog v-model="genreDialog" width="500" persistent>
       <v-card>
-        <v-card-title class="headline grey lighten-2 justify-center">
-          ジャンル選択
+        <v-card-title class="headline grey lighten-2 justify-space-between">
+          <v-btn @click="$router.go(-1)">
+            <v-icon>
+              mdi-arrow-left
+            </v-icon>
+            戻る
+          </v-btn>
+          <span>ジャンル選択</span>
+          <v-btn @click="toggleDialog">
+            <v-icon>
+              mdi-cog
+            </v-icon>
+            <span>設定</span>
+          </v-btn>
         </v-card-title>
 
         <v-btn-toggle v-model="selectedGenre" class="d-block mt-6">
@@ -45,6 +57,68 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="settingDialog" width="500" persistent>
+      <v-card>
+        <v-card-title class="headline grey lighten-2 justify-space-between">
+          <v-btn left @click="toggleDialog">
+            <v-icon>
+              mdi-arrow-left
+            </v-icon>
+            戻る
+          </v-btn>
+          <span>設定</span>
+          <div style="width: 87px;"></div>
+        </v-card-title>
+        <v-card-text class="pt-3">
+          <v-container>
+            <v-row class="mb-7" align="center" no-gutters>
+              <v-col cols="12" md="3" class="mb-2 px-3">
+                タイプ音
+              </v-col>
+              <v-col cols="12" md="9" class="px-3">
+                <v-select
+                  v-model="correct"
+                  :items="this.$CORRECT_SOUNDS"
+                  item-text="label"
+                  item-value="name"
+                  solo
+                  prepend-icon="mdi-play-circle"
+                ></v-select>
+              </v-col>
+            </v-row>
+            <v-row class="mb-7" align="center" no-gutters>
+              <v-col cols="12" md="3" class="mb-2 px-3">
+                ミス音
+              </v-col>
+              <v-col cols="12" md="9" class="px-3">
+                <v-select
+                  v-model="wrong"
+                  :items="this.$WRONG_SOUNDS"
+                  item-text="label"
+                  item-value="name"
+                  solo
+                  prepend-icon="mdi-play-circle"
+                ></v-select>
+              </v-col>
+            </v-row>
+            <v-row align="center" no-gutters>
+              <v-col cols="12" md="3" class="mb-5 px-3">
+                音量
+              </v-col>
+              <v-col cols="12" md="9" class="px-3">
+                <v-slider
+                  v-model="volume"
+                  min="0"
+                  max="20"
+                  prepend-icon="mdi-volume-high"
+                ></v-slider>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -60,10 +134,37 @@ export default {
   data() {
     return {
       genres: [],
-      dialog: true,
+      genreDialog: true,
+      settingDialog: false,
       selectedGenre: "",
       disabled: true
     };
+  },
+  computed: {
+    correct: {
+      get() {
+        return this.$store.getters['sound/getCorrect']
+      },
+      set(value) {
+        this.$store.dispatch('sound/setCorrect', value)
+      }
+    },
+    wrong: {
+      get() {
+        return this.$store.getters['sound/getWrong']
+      },
+      set(value) {
+        this.$store.dispatch('sound/setWrong', value)
+      }
+    },
+    volume: {
+      get() {
+        return this.$store.getters['sound/getVolume']
+      },
+      set(value) {
+        this.$store.dispatch('sound/setVolume', value)
+      }
+    },
   },
   watch: {
     selectedGenre(v) {
@@ -87,10 +188,14 @@ export default {
       })
   },
   methods: {
+    toggleDialog() {
+      this.genreDialog = !this.genreDialog
+      this.settingDialog = !this.settingDialog
+    },
     submitGenre() {
       if (this.selectedGenre !== '') {
         this.$refs.PlayComponent.initMethods();
-        this.dialog = false;
+        this.genreDialog = false;
       }
     }
   }
