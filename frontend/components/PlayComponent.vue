@@ -87,9 +87,7 @@ export default {
       current: '',
       next: '',
       countDownNumber: 3,
-      passSec: 600,
-      correctSound: correct02,
-      wrongSound: wrong02
+      passSec: 60
     }
   },
   computed: {
@@ -106,16 +104,43 @@ export default {
       return this.totalCorrectKeyCount / this.totalKeyCount
     },
     kps() {
-      if ((this.totalCorrectKeyCount) === 0) {
+      if (this.totalCorrectKeyCount === 0) {
         return 0
       }
-      return (this.totalCorrectKeyCount / (600 - this.passSec)).toFixed(1)
+      return (this.totalCorrectKeyCount / (60 - this.passSec)).toFixed(1)
     },
     score() {
       if (this.correctRate === 0) {
         return 0
       }
       return Math.floor((this.correctKeyCountNormal * 10 + this.correctKeyCountBonus * 20) * this.correctRate)
+    },
+    correctSoundName() {
+      return this.$store.getters['sound/getCorrect']
+    },
+    wrongSoundName() {
+      return this.$store.getters['sound/getWrong']
+    },
+    soundVolume() {
+      return this.$store.getters['sound/getVolume'] / 20
+    },
+    correctSoundSrc() {
+      let src = null;
+      this.$CORRECT_SOUNDS.forEach((row) => {
+        if (row.name === this.correctSoundName) {
+          src = row.src
+        }
+      })
+      return src
+    },
+    wrongSoundSrc() {
+      let src = null;
+      this.$WRONG_SOUNDS.forEach((row) => {
+        if (row.name === this.wrongSoundName) {
+          src = row.src
+        }
+      })
+      return src
     }
   },
   watch: {
@@ -188,13 +213,15 @@ export default {
     },
     correct() {
       const sound = new Howl({
-        src: this.correctSound
+        src: this.correctSoundSrc,
+        volume: this.soundVolume
       })
       sound.play()
     },
     wrong() {
       const sound = new Howl({
-        src: this.wrongSound
+        src: this.wrongSoundSrc,
+        volume: this.soundVolume
       })
       sound.play()
     },
