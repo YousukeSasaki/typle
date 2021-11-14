@@ -43,7 +43,8 @@ export default {
    */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/auth-next'
   ],
   /*
    ** vuetify module configuration
@@ -105,13 +106,30 @@ export default {
     prefix: '/api',
     proxy: true,
   },
-  
+
   proxy: {
     '/api': {
       target: 'http://docker.for.mac.localhost:5000',
       pathRewrite: {
         '^/api/': '/api/v1/',
       },
+    }
+  },
+
+  auth: {
+    redirect: {
+      login: '/login',  // 未ログイン時のリダイレクト先
+      logout: '/logout',  // ログアウト処理を実行した直後のリダイレクト先
+      callback: '/callback',  // コールバックURL
+      home: '/',  // ログイン後に遷移するページ
+    },
+    strategies: {
+      auth0: {
+        domain: 'typle.jp.auth0.com',
+        clientId: 'c1G8j2GBwod7hNSXgcXoR2x3GC5Ceobc',
+        audience: 'https://typle.jp.auth0.com/api/v2/',
+        logoutRedirectUri: 'http://localhost:8888/login'
+      }
     }
   }
 }
