@@ -89,9 +89,6 @@ export default {
       title: 'Vuetify.js'
     }
   },
-  created() {
-    console.log(this.$auth)
-  },
   methods: {
     loginWithAuthZero() {
       this.$auth.loginWith('auth0')
