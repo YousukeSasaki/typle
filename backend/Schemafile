@@ -3,6 +3,16 @@
 
 # unsined: true => 負の数を扱わない整数に限定する場合につける
 
+create_table "users", id: :bigint, unsigned: true, comment: "ユーザー", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  t.string "name", default: ""
+  t.string "email", default: ""
+  t.string "auth0_social", default: "", null: false
+  t.string "auth0_user_id", default: "", null: false
+  t.datetime "updated_at", null: false
+  t.datetime "created_at", null: false
+  t.datetime "deleted_at"
+end
+
 create_table "questions", id: :bigint, unsigned: true, comment: "問題", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
   t.string "preview", default: "", null: false
   t.string "kana", default: "", null: false
