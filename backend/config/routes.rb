@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
+      patch '/users/login_create', to: 'users#login_create'
       resources :questions, only: [:index]
       resources :genres, only: [:index]
     end

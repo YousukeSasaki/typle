@@ -121,7 +121,7 @@ export default {
       login: '/login',  // 未ログイン時のリダイレクト先
       logout: '/logout',  // ログアウト処理を実行した直後のリダイレクト先
       callback: '/callback',  // コールバックURL
-      home: '/',  // ログイン後に遷移するページ
+      home: '/users/login_create',  // ログイン後に遷移するページ
     },
     strategies: {
       auth0: {
