@@ -3,11 +3,19 @@
 
 # unsined: true => 負の数を扱わない整数に限定する場合につける
 
-create_table "users", id: :bigint, unsigned: true, comment: "ユーザー", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
-  t.string "name", default: ""
-  t.string "email", default: ""
-  t.string "auth0_social", default: "", null: false
-  t.string "auth0_user_id", default: "", null: false
+create_table "genres", id: :bigint, unsigned: true, comment: "ジャンル", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  t.string "name", null: false
+  t.string "value", null: false
+  t.integer "sort_num"
+  t.datetime "updated_at", null: false
+  t.datetime "created_at", null: false
+  t.datetime "deleted_at"
+end
+
+create_table "play_modes", id: :bigint, unsigned: true, comment: "プレイモード", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  t.string "name", null: false
+  t.string "value", null: false
+  t.integer "sort_num"
   t.datetime "updated_at", null: false
   t.datetime "created_at", null: false
   t.datetime "deleted_at"
@@ -25,15 +33,6 @@ create_table "questions", id: :bigint, unsigned: true, comment: "問題", force:
   t.datetime "deleted_at"
 end
 
-create_table "genres", id: :bigint, unsigned: true, comment: "ジャンル", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
-  t.string "name", null: false
-  t.string "value", null: false
-  t.integer "sort_num"
-  t.datetime "updated_at", null: false
-  t.datetime "created_at", null: false
-  t.datetime "deleted_at"
-end
-
 create_table "requests", id: :bigint, unsigned: true, comment: "リクエスト", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
   t.string "preview", null: false
   t.string "kana", null: false
@@ -42,4 +41,28 @@ create_table "requests", id: :bigint, unsigned: true, comment: "リクエスト"
   t.datetime "updated_at", null: false
   t.datetime "created_at", null: false
   t.datetime "rejected_at"
+end
+
+create_table "results", id: :bigint, unsigned: true, comment: "プレイ結果", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  t.integer "user_id", comment: "ユーザー(users)ID"
+  t.integer "play_mode_id", comment: "プレイモード(play_modes)ID"
+  t.integer "genre_id", comment: "ジャンル(genres)ID"
+  t.float "play_time_sec", comment: "プレイ時間(秒)"
+  t.integer "total_key", comment: "合計タイプ数"
+  t.integer "correct_key", comment: "正解タイプ数"
+  t.integer "wrong_key", comment: "ミスタイプ数"
+  t.float "accuracy", comment: "精度(％)"
+
+  t.datetime "updated_at", null: false
+  t.datetime "created_at", null: false
+end
+
+create_table "users", id: :bigint, unsigned: true, comment: "ユーザー", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  t.string "name", default: ""
+  t.string "email", default: ""
+  t.string "auth0_social", default: "", null: false
+  t.string "auth0_user_id", default: "", null: false
+  t.datetime "updated_at", null: false
+  t.datetime "created_at", null: false
+  t.datetime "deleted_at"
 end

@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  has_many :results
+
   def self.login_create(param)
     sub = param[:sub].split('|')
     user = User.find_or_initialize_by(auth0_social: sub[0], auth0_user_id: sub[1])

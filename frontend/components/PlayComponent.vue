@@ -6,7 +6,7 @@
     <div v-if="showingPage === 'playing'" :class="$style['wide-wrapper']">
       <div :class="[$style.timer, $style.first]"></div>
       <div :class="[$style.timer, $style.second]"></div>
-      <p :class="$style['timer-number']">{{ passSec }}</p>
+      <p :class="$style['timer-number']">{{ remainingTime }}</p>
       <div :class="$style['inner-wrapper']">
         <p :class="$style.question">{{ preview }}</p>
         <p :class="$style['input-line']">
@@ -33,7 +33,7 @@
           </p>
         </div>
 
-        <p :class="$style.result">正確率: {{ correctRate * 100 }}%</p>
+        <p :class="$style.result">正確率: {{ accuracy * 100 }}%</p>
         <p :class="$style.result">平均タイプ数: {{ kps }}回/秒</p>
         <p :class="$style.result">スコア: {{ score }}</p>
       </div>
@@ -41,7 +41,7 @@
     <div v-if="showingPage === 'result'" :class="$style['wide-wrapper']">
       <p :class="$style.result">正解タイプ数: {{ totalCorrectKeyCount }}</p>
       <p :class="$style.result">ミスタイプ数: {{ wrongKeyCount }}</p>
-      <p :class="$style.result">正確率: {{ correctRate * 100 }}%</p>
+      <p :class="$style.result">正確率: {{ accuracy * 100 }}%</p>
       <p :class="$style.result">平均タイプ数: {{ kps }}回/秒</p>
       <p :class="$style.result">スコア: {{ score }}</p>
     </div>
@@ -50,14 +50,6 @@
 
 <script>
 import { Howl, Howler } from 'howler';
-import correct01 from '@/assets/sound/correct01.mp3'
-import correct02 from '@/assets/sound/correct02.mp3'
-import correct03 from '@/assets/sound/correct03.mp3'
-import correct04 from '@/assets/sound/correct04.mp3'
-import wrong01 from '@/assets/sound/wrong01.mp3'
-import wrong02 from '@/assets/sound/wrong02.mp3'
-import wrong03 from '@/assets/sound/wrong03.mp3'
-import wrong04 from '@/assets/sound/wrong04.mp3'
 
 export default {
   props: {
@@ -87,7 +79,7 @@ export default {
       current: '',
       next: '',
       countDownNumber: 3,
-      passSec: 60
+      remainingTime: 60
     }
   },
   computed: {
@@ -97,7 +89,7 @@ export default {
     totalKeyCount() {
       return this.correctKeyCountNormal + this.correctKeyCountBonus + this.wrongKeyCount
     },
-    correctRate() {
+    accuracy() {
       if (this.totalKeyCount === 0) {
         return 0
       }
@@ -107,13 +99,13 @@ export default {
       if (this.totalCorrectKeyCount === 0) {
         return 0
       }
-      return (this.totalCorrectKeyCount / (60 - this.passSec)).toFixed(1)
+      return (this.totalCorrectKeyCount / (60 - this.remainingTime)).toFixed(1)
     },
     score() {
-      if (this.correctRate === 0) {
+      if (this.accuracy === 0) {
         return 0
       }
-      return Math.floor((this.correctKeyCountNormal * 10 + this.correctKeyCountBonus * 20) * this.correctRate)
+      return Math.floor((this.correctKeyCountNormal * 10 + this.correctKeyCountBonus * 20) * this.accuracy)
     },
     correctSoundName() {
       return this.$store.getters['sound/getCorrect']
@@ -151,8 +143,8 @@ export default {
         this.startGame()
       }
     },
-    passSec(v) {
-      if (v === 0) {
+    remainingTime(v) {
+      if (v == 0) {
         window.removeEventListener('keypress', this.eventListeners.inputKeyEvent)
         clearInterval(this.timerObj)
         this.showingPage = 'result'
@@ -200,8 +192,8 @@ export default {
       this.eventListeners.inputKeyEvent = (e) => this.inputKeyEvent(e)
       const self = this
       this.timerObj = setInterval(function() {
-        self.passSec--
-      }, 1000)
+        self.remainingTime = (self.remainingTime - 0.1).toFixed(1)
+      }, 100)
       window.addEventListener('keypress', this.eventListeners.inputKeyEvent)
     },
     setQuestions(question) {
