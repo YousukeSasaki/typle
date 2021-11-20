@@ -36,6 +36,7 @@ lists.each do |list|
   Question.create(
     preview: list[:preview],
     kana: list[:kana],
+    kana_length: list[:kana].length,
     user_id: list[:user_id],
     genre_id: list[:genre_id]
   )
