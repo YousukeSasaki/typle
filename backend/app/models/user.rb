@@ -11,4 +11,9 @@ class User < ApplicationRecord
     user.email = param[:email]
     user.save
   end
+
+  def self.sub_search(sub)
+    social, user_id = sub.split('|')
+    User.find_by(auth0_social: social, auth0_user_id: user_id)
+  end
 end

@@ -1,6 +1,10 @@
 <template>
   <div class="text-center">
-    <PlayComponent ref="PlayComponent" :genre="selectedGenre"></PlayComponent>
+    <PlayComponent
+      ref="PlayComponent"
+      :play-mode="playMode"
+      :genre="selectedGenre"
+    />
     <v-dialog v-model="genreDialog" width="500" persistent>
       <v-card>
         <v-card-title class="headline grey lighten-2 justify-space-between">
@@ -136,6 +140,7 @@ export default {
       genres: [],
       genreDialog: true,
       settingDialog: false,
+      playMode: 'score',
       selectedGenre: "",
       disabled: true
     };
