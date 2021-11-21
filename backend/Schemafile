@@ -1,6 +1,10 @@
 # encoding: utf-8
 # 上のコメント行をつけないと、下の定義の中で日本語が使えません。
 
+# rename_columnの際は既存データを消さないように注意が必要
+# （ridgepoleコマンド実行後は消していい）
+# t.string "new_column", renamed_from: "old_column"
+
 # unsined: true => 負の数を扱わない整数に限定する場合につける
 
 create_table "genres", id: :bigint, unsigned: true, comment: "ジャンル", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
@@ -48,10 +52,12 @@ create_table "results", id: :bigint, unsigned: true, comment: "プレイ結果",
   t.integer "play_mode_id", comment: "プレイモード(play_modes)ID"
   t.integer "genre_id", comment: "ジャンル(genres)ID"
   t.float "play_time_sec", comment: "プレイ時間(秒)"
-  t.integer "total_key", comment: "合計タイプ数"
-  t.integer "correct_key", comment: "正解タイプ数"
-  t.integer "wrong_key", comment: "ミスタイプ数"
+  t.integer "total", comment: "合計タイプ数"
+  t.integer "normal_correct", comment: "通常正解タイプ数"
+  t.integer "bonus_correct", comment: "ボーナス正解タイプ数"
+  t.integer "wrong", comment: "ミスタイプ数"
   t.float "accuracy", comment: "精度(％)"
+  t.integer "score", comment: "スコア"
 
   t.datetime "updated_at", null: false
   t.datetime "created_at", null: false

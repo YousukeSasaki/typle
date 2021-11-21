@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       patch '/users/login_create', to: 'users#login_create'
       resources :questions, only: [:index]
       resources :genres, only: [:index]
+      resources :results, only: [:create]
     end
   end
 end

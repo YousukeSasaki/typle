@@ -33,7 +33,7 @@
           </p>
         </div>
 
-        <p :class="$style.result">正確率: {{ accuracy * 100 }}%</p>
+        <p :class="$style.result">正確率: {{ accuracyPercent }}%</p>
         <p :class="$style.result">平均タイプ数: {{ kps }}回/秒</p>
         <p :class="$style.result">スコア: {{ score }}</p>
       </div>
@@ -41,7 +41,7 @@
     <div v-if="showingPage === 'result'" :class="$style['wide-wrapper']">
       <p :class="$style.result">正解タイプ数: {{ totalCorrectKeyCount }}</p>
       <p :class="$style.result">ミスタイプ数: {{ wrongKeyCount }}</p>
-      <p :class="$style.result">正確率: {{ accuracy * 100 }}%</p>
+      <p :class="$style.result">正確率: {{ accuracyPercent }}%</p>
       <p :class="$style.result">平均タイプ数: {{ kps }}回/秒</p>
       <p :class="$style.result">スコア: {{ score }}</p>
     </div>
@@ -53,6 +53,9 @@ import { Howl, Howler } from 'howler';
 
 export default {
   props: {
+    playMode: {
+      type: String
+    },
     genre: {
       type: String
     }
@@ -79,6 +82,7 @@ export default {
       current: '',
       next: '',
       countDownNumber: 3,
+      timeLimit: 60,
       remainingTime: 60
     }
   },
@@ -89,17 +93,22 @@ export default {
     totalKeyCount() {
       return this.correctKeyCountNormal + this.correctKeyCountBonus + this.wrongKeyCount
     },
+    // 精度（小数第四位を四捨五入）
     accuracy() {
       if (this.totalKeyCount === 0) {
         return 0
       }
-      return this.totalCorrectKeyCount / this.totalKeyCount
+      return Math.round(this.totalCorrectKeyCount / this.totalKeyCount * 1000) / 1000
+    },
+    // 精度（パーセント）
+    accuracyPercent() {
+      return Math.round(this.accuracy * 100)
     },
     kps() {
       if (this.totalCorrectKeyCount === 0) {
         return 0
       }
-      return (this.totalCorrectKeyCount / (60 - this.remainingTime)).toFixed(1)
+      return (this.totalCorrectKeyCount / (this.timeLimit - this.remainingTime)).toFixed(1)
     },
     score() {
       if (this.accuracy === 0) {
@@ -147,6 +156,9 @@ export default {
       if (v == 0) {
         window.removeEventListener('keypress', this.eventListeners.inputKeyEvent)
         clearInterval(this.timerObj)
+        if (this.$auth.loggedIn) {
+          this.saveResult()
+        } // 未ログイン時は結果を保存しない
         this.showingPage = 'result'
       }
     }
@@ -455,6 +467,27 @@ export default {
         this.wrong()
         this.wrongKeyCount++
       }
+    },
+    saveResult() {
+      const result = {
+        user: this.$auth.$state.user,
+        play_mode: this.playMode,
+        genre: this.genre,
+        play_time_sec: this.timeLimit - this.remainingTime,
+        total: this.totalKeyCount,
+        normal_correct: this.correctKeyCountNormal,
+        bonus_correct: this.correctKeyCountBonus,
+        wrong: this.wrongKeyCount,
+        accuracy: this.accuracy,
+        score: this.score
+      }
+      this.$axios.$post('/results', { result })
+        .then((res) => {
+
+        })
+        .catch((err) => {
+          console.log('エラーが発生しました', err)
+        })
     }
   }
 }
