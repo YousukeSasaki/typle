@@ -1,129 +1,133 @@
 <template>
-  <div class="text-center">
-    <PlayComponent
-      ref="PlayComponent"
-      :play-mode="playMode"
-      :genre="selectedGenre"
-    />
-    <v-dialog v-model="genreDialog" width="500" persistent>
-      <v-card>
-        <v-card-title class="headline grey lighten-2 justify-space-between">
-          <v-btn @click="$router.go(-1)">
-            <v-icon>
-              mdi-arrow-left
-            </v-icon>
-            戻る
-          </v-btn>
-          <span>ジャンル選択</span>
-          <v-btn @click="toggleDialog">
-            <v-icon>
-              mdi-cog
-            </v-icon>
-            <span>設定</span>
-          </v-btn>
-        </v-card-title>
+  <v-row class="text-center">
+    <v-col class="mb-4">
+      <div class="text-center">
+        <PlayComponent
+          ref="PlayComponent"
+          :play-mode="playMode"
+          :genre="selectedGenre"
+        />
+        <v-dialog v-model="genreDialog" width="500" persistent>
+          <v-card>
+            <v-card-title class="headline grey lighten-2 justify-space-between">
+              <v-btn @click="$router.go(-1)">
+                <v-icon>
+                  mdi-arrow-left
+                </v-icon>
+                戻る
+              </v-btn>
+              <span>ジャンル選択</span>
+              <v-btn @click="toggleDialog">
+                <v-icon>
+                  mdi-cog
+                </v-icon>
+                <span>設定</span>
+              </v-btn>
+            </v-card-title>
 
-        <v-btn-toggle v-model="selectedGenre" class="d-block mt-6">
-          <v-card-text class="pt-3">
-            <v-container>
-              <v-row align="center" no-gutters>
-                <v-col
-                  v-for="genre in genres"
-                  :key="genre.value"
-                  cols="12" md="6" class="mb-6 px-3"
-                >
-                  <v-btn
-                    class="btn"
-                    :class="`btn-${genre.value}`"
-                    :value="genre.value">
-                    <span>{{ genre.name }}</span>
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-card-text>
-        </v-btn-toggle>
+            <v-btn-toggle v-model="selectedGenre" class="d-block mt-6">
+              <v-card-text class="pt-3">
+                <v-container>
+                  <v-row align="center" no-gutters>
+                    <v-col
+                      v-for="genre in genres"
+                      :key="genre.value"
+                      cols="12" md="6" class="mb-6 px-3"
+                    >
+                      <v-btn
+                        class="btn"
+                        :class="`btn-${genre.value}`"
+                        :value="genre.value">
+                        <span>{{ genre.name }}</span>
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+            </v-btn-toggle>
 
-        <v-divider></v-divider>
+            <v-divider></v-divider>
 
-        <v-card-actions class="pa-0">
-          <v-btn
-            class="btn-submit w-100"
-            color="primary"
-            @click="submitGenre"
-            :disabled="disabled"
-          >
-            <v-icon dark left>
-              mdi-checkbox-marked-circle
-            </v-icon>
-            決定
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+            <v-card-actions class="pa-0">
+              <v-btn
+                class="btn-submit w-100"
+                color="primary"
+                @click="submitGenre"
+                :disabled="disabled"
+              >
+                <v-icon dark left>
+                  mdi-checkbox-marked-circle
+                </v-icon>
+                決定
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
 
-    <v-dialog v-model="settingDialog" width="500" persistent>
-      <v-card>
-        <v-card-title class="headline grey lighten-2 justify-space-between">
-          <v-btn left @click="toggleDialog">
-            <v-icon>
-              mdi-arrow-left
-            </v-icon>
-            戻る
-          </v-btn>
-          <span>設定</span>
-          <div style="width: 87px;"></div>
-        </v-card-title>
-        <v-card-text class="pt-3">
-          <v-container>
-            <v-row class="mb-7" align="center" no-gutters>
-              <v-col cols="12" md="3" class="mb-2 px-3">
-                タイプ音
-              </v-col>
-              <v-col cols="12" md="9" class="px-3">
-                <v-select
-                  v-model="correct"
-                  :items="this.$CORRECT_SOUNDS"
-                  item-text="label"
-                  item-value="name"
-                  solo
-                  prepend-icon="mdi-play-circle"
-                ></v-select>
-              </v-col>
-            </v-row>
-            <v-row class="mb-7" align="center" no-gutters>
-              <v-col cols="12" md="3" class="mb-2 px-3">
-                ミス音
-              </v-col>
-              <v-col cols="12" md="9" class="px-3">
-                <v-select
-                  v-model="wrong"
-                  :items="this.$WRONG_SOUNDS"
-                  item-text="label"
-                  item-value="name"
-                  solo
-                  prepend-icon="mdi-play-circle"
-                ></v-select>
-              </v-col>
-            </v-row>
-            <v-row align="center" no-gutters>
-              <v-col cols="12" md="3" class="mb-5 px-3">
-                音量
-              </v-col>
-              <v-col cols="12" md="9" class="px-3">
-                <v-slider
-                  v-model="volume"
-                  min="0"
-                  max="20"
-                  prepend-icon="mdi-volume-high"
-                ></v-slider>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-  </div>
+        <v-dialog v-model="settingDialog" width="500" persistent>
+          <v-card>
+            <v-card-title class="headline grey lighten-2 justify-space-between">
+              <v-btn left @click="toggleDialog">
+                <v-icon>
+                  mdi-arrow-left
+                </v-icon>
+                戻る
+              </v-btn>
+              <span>設定</span>
+              <div style="width: 87px;"></div>
+            </v-card-title>
+            <v-card-text class="pt-3">
+              <v-container>
+                <v-row class="mb-7" align="center" no-gutters>
+                  <v-col cols="12" md="3" class="mb-2 px-3">
+                    タイプ音
+                  </v-col>
+                  <v-col cols="12" md="9" class="px-3">
+                    <v-select
+                      v-model="correct"
+                      :items="this.$CORRECT_SOUNDS"
+                      item-text="label"
+                      item-value="name"
+                      solo
+                      prepend-icon="mdi-play-circle"
+                    ></v-select>
+                  </v-col>
+                </v-row>
+                <v-row class="mb-7" align="center" no-gutters>
+                  <v-col cols="12" md="3" class="mb-2 px-3">
+                    ミス音
+                  </v-col>
+                  <v-col cols="12" md="9" class="px-3">
+                    <v-select
+                      v-model="wrong"
+                      :items="this.$WRONG_SOUNDS"
+                      item-text="label"
+                      item-value="name"
+                      solo
+                      prepend-icon="mdi-play-circle"
+                    ></v-select>
+                  </v-col>
+                </v-row>
+                <v-row align="center" no-gutters>
+                  <v-col cols="12" md="3" class="mb-5 px-3">
+                    音量
+                  </v-col>
+                  <v-col cols="12" md="9" class="px-3">
+                    <v-slider
+                      v-model="volume"
+                      min="0"
+                      max="20"
+                      prepend-icon="mdi-volume-high"
+                    ></v-slider>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+      </div>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
