@@ -5,11 +5,13 @@ class User < ApplicationRecord
     sub = param[:sub].split('|')
     user = User.find_or_initialize_by(auth0_social: sub[0], auth0_user_id: sub[1])
 
-    return if user.created_at.present?
+    if user.created_at.blank?
+      user.name = param[:name]
+      user.email = param[:email]
+      user.save
+    end
 
-    user.name = param[:name]
-    user.email = param[:email]
-    user.save
+    user
   end
 
   def self.sub_search(sub)

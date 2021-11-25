@@ -2,9 +2,15 @@ module Api
   module V1
     class UsersController < ApplicationController
       def login_create
-        User.login_create(user_params)
+        user = User.login_create(user_params)
 
-        render json: { status: 'success' }
+        user_obj = {
+          id: user.id,
+          name: user.name,
+          email: user.email
+        }.to_json
+
+        render json: { user: user_obj }
       end
 
       private
