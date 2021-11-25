@@ -6,3 +6,11 @@
     </div>
   </v-container>
 </template>
+
+<script>
+export default {
+  created() {
+    this.$store.dispatch('user/resetAll')
+  }
+}
+</script>
