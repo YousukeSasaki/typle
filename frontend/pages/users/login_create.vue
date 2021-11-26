@@ -10,8 +10,8 @@ export default {
     const user = this.$auth.$state.user
     this.$axios.$patch('/users/login_create', { user })
       .then((res) => {
-        const user_obj = JSON.parse(res.user)
-        this.$store.dispatch('user/setAll', user_obj)
+        const userObj = JSON.parse(res.user)
+        this.$store.dispatch('user/setAll', userObj)
 
         this.$router.push('/')
       })
