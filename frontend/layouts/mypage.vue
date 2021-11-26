@@ -9,7 +9,7 @@
               <v-list color="transparent">
                 <v-list-item
                   v-for="item in items"
-                  :key="item"
+                  :key="item.key"
                   nuxt
                   :to="item.route"
                 >
@@ -46,8 +46,8 @@ export default {
   },
   data: () => ({
     items: [
-      { name: '累積データ', route: '/mypage/dataview'},
-      { name: 'アカウント設定', route: '/mypage/config'},
+      { key: 'dataview', name: '累積データ', route: '/mypage/dataview'},
+      { key: 'config', name: 'アカウント設定', route: '/mypage/config'},
     ]
   })
 }

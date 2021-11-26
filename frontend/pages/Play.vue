@@ -193,7 +193,7 @@ export default {
         })
       })
       .catch((err) => {
-          console.log('エラーが発生しました', err)
+        console.log('エラーが発生しました', err)
       })
   },
   methods: {
