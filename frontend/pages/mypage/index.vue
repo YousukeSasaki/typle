@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <h1>こんにちは、{{ this.$auth.$state.user.family_name }}さん!</h1>
+    <h1>マイページトップ（何に使おう）</h1>
   </v-container>
 </template>
 
