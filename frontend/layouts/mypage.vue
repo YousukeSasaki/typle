@@ -5,22 +5,7 @@
       <v-container>
         <v-row>
           <v-col cols="3">
-            <v-sheet rounded="lg">
-              <v-list color="transparent">
-                <v-list-item
-                  v-for="item in items"
-                  :key="item.key"
-                  nuxt
-                  :to="item.route"
-                >
-                  <v-list-item-content>
-                    <v-list-item-title>
-                      {{ item.name }}
-                    </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list>
-            </v-sheet>
+            <SideNav />
           </v-col>
 
           <v-col>
@@ -39,16 +24,13 @@
 
 <script>
 import Header from '@/components/common/Header'
+import SideNav from '@/components/common/mypage/SideNav'
 
 export default {
+  name: "mypage",
   components: {
-    Header
-  },
-  data: () => ({
-    items: [
-      { key: 'dataview', name: '累積データ', route: '/mypage/dataview'},
-      { key: 'config', name: 'アカウント設定', route: '/mypage/config'},
-    ]
-  })
+    Header,
+    SideNav
+  }
 }
 </script>

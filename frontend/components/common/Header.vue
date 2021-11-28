@@ -32,14 +32,18 @@
       </v-tabs>
     </div>
     <div class="d-flex align-center ml-auto">
-      <template v-if="this.$auth.loggedIn">
+      <NuxtLink
+        v-if="this.$auth.loggedIn"
+        to="/mypage"
+        class="d-flex align-center"
+      >
         <!-- TODO: S3で画像アップロード出来たらDBからの取得に書き換える -->
         <v-img
           :src="this.$auth.$state.user.picture"
           width="56"
         />
         <p class="mb-0 ml-3 white--text">{{ user.name }}</p>
-      </template>
+      </NuxtLink>
       <v-btn
         v-if="!this.$auth.loggedIn"
         type="primary"
