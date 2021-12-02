@@ -46,6 +46,10 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/auth-next'
   ],
+
+  router: {
+    middleware: ['flashMessage']
+  },
   /*
    ** vuetify module configuration
    ** https://github.com/nuxt-community/vuetify-module

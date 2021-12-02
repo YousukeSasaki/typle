@@ -30,7 +30,6 @@ import SideNav from '@/components/common/mypage/SideNav'
 
 export default {
   name: "mypage",
-  middleware: 'flashMessage',
   components: {
     FlashMessage,
     Header,

@@ -16,7 +16,6 @@ import Header from '@/components/common/Header'
 
 export default {
   name: 'default',
-  middleware: 'flashMessage',
   components: {
     FlashMessage,
     Header
