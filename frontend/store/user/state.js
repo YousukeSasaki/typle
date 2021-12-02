@@ -1,5 +1,6 @@
 export default () => ({
   id: null,
   name: '',
-  email: ''
+  email: '',
+  isLogouting: false
 })

@@ -59,11 +59,24 @@ export default {
       this.loading = true
       this.$axios.$patch(`/users/${this.user.id}`, { user: this.user })
         .then((res) => {
-          const userObj = JSON.parse(res.user)
-          this.$store.dispatch('user/setAll', userObj)
+          const msgObj = {
+            content: res.content,
+            type: res.status
+          }
+          this.$store.dispatch('flashMessage/setAll', msgObj)
+
+          if (res.status === 'success') {
+            const userObj = JSON.parse(res.user)
+            this.$store.dispatch('user/setAll', userObj)
+          }
         })
         .catch((err) => {
           console.log('エラーが発生しました', err)
+          const msgObj = {
+            content: '更新ができませんでした。運営にお問い合わせください。',
+            type: 'error'
+          }
+          this.$store.dispatch('flashMessage/setAll', msgObj)
         })
         .finally(() => {
           this.loading = false

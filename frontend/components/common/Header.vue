@@ -73,7 +73,17 @@ export default {
       this.$auth.loginWith('auth0')
     },
     async logoutWithAuthZero() {
-      await this.$auth.logout()
+      try {
+        await this.$store.dispatch('user/setIsLogouting')
+        await this.$auth.logout()
+      } catch(err) {
+        console.log(err)
+        const msgObj = {
+          content: 'ログアウトできませんでした。しばらく経ってから再度お試しください。',
+          type: 'error'
+        }
+        this.$store.dispatch('flashMessage/setAll', msgObj)
+      }
     }
   }
 }
