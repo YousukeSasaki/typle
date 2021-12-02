@@ -3,6 +3,7 @@
     <Header />
     <v-main>
       <v-container class="py-0">
+        <FlashMessage />
         <Nuxt />
       </v-container>
     </v-main>
@@ -10,10 +11,13 @@
 </template>
 
 <script>
+import FlashMessage from '@/components/common/FlashMessage'
 import Header from '@/components/common/Header'
 
 export default {
+  name: 'default',
   components: {
+    FlashMessage,
     Header
   }
 }

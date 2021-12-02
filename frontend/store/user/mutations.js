@@ -8,6 +8,9 @@ export default {
   SET_EMAIL(state, payload) {
     state.email = payload
   },
+  SET_IS_LOGOUTING(state) {
+    state.isLogouting = true
+  },
   RESET_ID(state) {
     state.id = null
   },
@@ -16,5 +19,8 @@ export default {
   },
   RESET_EMAIL(state) {
     state.email = ''
+  },
+  RESET_IS_LOGOUTING(state) {
+    state.isLogouting = false
   }
 }

@@ -4,5 +4,8 @@ export default {
   },
   id: (state) => {
     return state.id
+  },
+  isLogouting: (state) => {
+    return state.isLogouting
   }
 }

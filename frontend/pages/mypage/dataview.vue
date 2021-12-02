@@ -82,7 +82,7 @@
         プレイ時間
       </v-col>
       <v-col cols="8">
-        {{ results.times }}秒
+        {{ `${results.hours}時間${results.minutes}分${results.secs}秒` }}
       </v-col>
     </v-row>
     <v-row>

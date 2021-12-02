@@ -3,6 +3,7 @@
     <Header />
     <v-main>
       <v-container>
+        <FlashMessage />
         <v-row>
           <v-col cols="3">
             <SideNav />
@@ -23,12 +24,14 @@
 </template>
 
 <script>
+import FlashMessage from '@/components/common/FlashMessage'
 import Header from '@/components/common/Header'
 import SideNav from '@/components/common/mypage/SideNav'
 
 export default {
   name: "mypage",
   components: {
+    FlashMessage,
     Header,
     SideNav
   }
