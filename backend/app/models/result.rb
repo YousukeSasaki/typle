@@ -4,7 +4,7 @@ class Result < ApplicationRecord
   belongs_to :user
 
   def self.init_instance(params)
-    user = User.sub_search(params[:user][:sub])
+    user = User.find_by_sub(params[:user][:sub])
     play_mode = PlayMode.find_by(value: params[:play_mode])
     genre = Genre.find_by(value: params[:genre])
 

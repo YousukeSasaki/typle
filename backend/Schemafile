@@ -7,6 +7,16 @@
 
 # unsined: true => 負の数を扱わない整数に限定する場合につける
 
+create_table "exps", id: :bigint, unsigned: true, comment: "ユーザーの経験値", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  t.integer "user_id", comment: "ユーザー(users)ID"
+  t.integer "level", comment: "レベル"
+  t.integer "point", comment: "経験値"
+  t.integer "max_point", comment: "現レベルの最大経験値"
+  t.datetime "updated_at", null: false
+  t.datetime "created_at", null: false
+  t.datetime "deleted_at"
+end
+
 create_table "genres", id: :bigint, unsigned: true, comment: "ジャンル", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
   t.string "name", null: false
   t.string "value", null: false
@@ -58,7 +68,6 @@ create_table "results", id: :bigint, unsigned: true, comment: "プレイ結果",
   t.integer "wrong", comment: "ミスタイプ数"
   t.float "accuracy", comment: "精度(％)"
   t.integer "score", comment: "スコア"
-
   t.datetime "updated_at", null: false
   t.datetime "created_at", null: false
 end

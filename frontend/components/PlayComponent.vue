@@ -483,7 +483,13 @@ export default {
       }
       this.$axios.$post('/results', { result })
         .then((res) => {
-
+          const exp = res.exp
+          const expObj = {
+            level: exp.level,
+            point: exp.point,
+            maxPoint: exp.max_point,
+          }
+          this.$store.dispatch('user/setExp', expObj)
         })
         .catch((err) => {
           console.log('エラーが発生しました', err)

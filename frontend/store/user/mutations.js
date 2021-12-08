@@ -8,8 +8,17 @@ export default {
   SET_EMAIL(state, payload) {
     state.email = payload
   },
-  SET_IS_LOGOUTING(state) {
-    state.isLogouting = true
+  SET_LEVEL(state, payload) {
+    state.level = payload
+  },
+  SET_POINT(state, payload) {
+    state.point = payload
+  },
+  SET_MAX_POINT(state, payload) {
+    state.maxPoint = payload
+  },
+  SET_IS_LOGOUTING(state, payload) {
+    state.isLogouting = payload
   },
   RESET_ID(state) {
     state.id = null
@@ -20,7 +29,16 @@ export default {
   RESET_EMAIL(state) {
     state.email = ''
   },
+  RESET_LEVEL(state) {
+    state.level = null
+  },
+  RESET_POINT(state) {
+    state.point = null
+  },
+  RESET_MAX_POINT(state) {
+    state.maxPoint = null
+  },
   RESET_IS_LOGOUTING(state) {
-    state.isLogouting = false
+    state.isLogouting = null
   }
 }

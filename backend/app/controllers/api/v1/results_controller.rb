@@ -2,13 +2,18 @@ module Api
   module V1
     class ResultsController < ApplicationController
       def create
-        result = Result.init_instance(result_params)
+        ActiveRecord::Base.transaction do
+          @result = Result.init_instance(result_params)
+          @result.save!
 
-        if result.save
-          render json: { status: 'success' }
-        else
-          render json: { status: 'error' }
+          user = User.find_by_sub(result_params[:user][:sub])
+          @exp = Exp.find_by(user: user)
+          @exp.gain_exp
         end
+
+        render json: { status: 'success', exp: @exp }
+      rescue ActiveRecord::RecordInvalid
+        render json: { status: 'error' }
       end
 
       private
