@@ -17,10 +17,11 @@ module Api
 
       def login_create
         user = User.login_create(user_login_params)
-
         user_json = convert_to_store_json(user)
 
         render json: { status: 'success', content: 'ログインしました。', user: user_json }
+      rescue ActiveRecord::RecordInvalid
+        render json: { status: 'error' }
       end
 
       def dataview
@@ -34,10 +35,14 @@ module Api
       private
 
       def convert_to_store_json(user)
+        exp = user.exp
         {
           id: user.id,
           name: user.name,
-          email: user.email
+          email: user.email,
+          level: exp.level,
+          point: exp.point,
+          maxPoint: exp.max_point
         }.to_json
       end
 

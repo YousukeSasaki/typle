@@ -4,12 +4,22 @@ export default function({ route, store, from }) {
     // ログインしましたフラッシュメッセージが
     // 既に含まれているのでリセットしない
     return
-  } else if (from.path == '/login' && route.path == '/login' && store.getters['user/isLogouting']) {
-    // ログアウト処理後の遷移先
-    // ログアウトしましたフラッシュメッセージを表示
-    const msgObj = {
-      content: 'ログアウトしました',
-      type: 'success'
+  } else if (from.path == '/login' && route.path == '/login') {
+    let msgObj = {}
+    if (store.getters['user/isLogouting'] == 'success') {
+      // ログアウト成功後の遷移先
+      // ログアウトしましたフラッシュメッセージを表示
+      msgObj = {
+        content: 'ログアウトしました',
+        type: 'success'
+      }
+    } else if (store.getters['user/isLogouting'] == 'error') {
+      // ログアウト失敗後の遷移先
+      // ログアウトしましたフラッシュメッセージを表示
+      msgObj = {
+        content: 'ログインできませんでした。しばらく経ってからやり直していただくか、運営までお問い合わせください。',
+        type: 'error'
+      }
     }
     store.dispatch('flashMessage/setAll', msgObj)
     // ログアウト中ステータスのリセット

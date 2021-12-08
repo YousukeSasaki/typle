@@ -42,7 +42,25 @@
           :src="this.$auth.$state.user.picture"
           width="56"
         />
-        <p class="mb-0 ml-3 white--text">{{ user.name }}</p>
+        <v-list-item two-line>
+          <v-list-item-content class="white--text">
+            <v-list-item-title>{{ user.name }}</v-list-item-title>
+            <v-list-item-subtitle class="d-flex align-center white--text">
+              <p class="mb-0 mr-3">{{ `Lv.${user.level}` }}</p>
+              <v-progress-linear
+                :value="expGuage"
+                color="amber"
+                height="20"
+                class="justify-start"
+              >
+                <template v-slot:default>
+                  <strong class="justify-start">{{ `${user.point}/${user.maxPoint}回` }}</strong>
+                </template>
+              </v-progress-linear>
+            </v-list-item-subtitle>
+            <!-- <v-list-item-subtitle class="white--text">{{ `${user.point} / ${user.maxPoint}` }}</v-list-item-subtitle> -->
+          </v-list-item-content>
+        </v-list-item>
       </NuxtLink>
       <v-btn
         v-if="!this.$auth.loggedIn"
@@ -68,13 +86,19 @@ export default {
   created() {
     this.user = this.$store.getters['user/all']
   },
+  computed: {
+    expGuage() {
+      return this.user.point / this.user.maxPoint * 100
+    }
+  },
   methods: {
     loginWithAuthZero() {
       this.$auth.loginWith('auth0')
     },
     async logoutWithAuthZero() {
       try {
-        await this.$store.dispatch('user/setIsLogouting')
+        await this.$store.dispatch('user/setIsLogouting', 'success')
+        await this.$store.dispatch('user/resetAll')
         await this.$auth.logout()
       } catch(err) {
         console.log(err)
