@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   has_many :results
   has_one :exp
+  has_one :play_log
 
   def self.login_create(param)
     sub = param[:sub].split('|')
@@ -8,8 +9,11 @@ class User < ApplicationRecord
 
     if user.created_at.blank?
       ActiveRecord::Base.transaction do
-        exp = Exp.new(user: user, level: 1, point: 0, max_point: 1)
+        exp = Exp.new(user: user)
         exp.save!
+
+        play_log = PlayLog.new(user: user)
+        play_log.save!
 
         user.name = param[:name]
         user.email = param[:email]
