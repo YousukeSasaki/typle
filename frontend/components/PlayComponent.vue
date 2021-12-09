@@ -71,6 +71,34 @@ export default {
       correctKeyCountNormal: 0, // の正解キータイプ数(通常問題)
       correctKeyCountBonus: 0, // 正解キータイプ数(ボーナス問題)
       wrongKeyCount: 0, // 不正解キータイプ数
+      correctKeyTypesCount: {
+        a: 0,
+        b: 0,
+        c: 0,
+        d: 0,
+        e: 0,
+        f: 0,
+        g: 0,
+        h: 0,
+        i: 0,
+        j: 0,
+        k: 0,
+        l: 0,
+        m: 0,
+        n: 0,
+        o: 0,
+        p: 0,
+        q: 0,
+        r: 0,
+        s: 0,
+        t: 0,
+        u: 0,
+        v: 0,
+        w: 0,
+        x: 0,
+        y: 0,
+        z: 0,
+      }, // キー別正解タイプ数
       stockQuestionArr: [],
       kanaArr: [], // 平仮名を１文字ずつ配列に格納
       romanArr: [], // ローマ字を平仮名ごとに配列に格納
@@ -215,14 +243,14 @@ export default {
       this.translateToRoman()
       this.initialCurrentQuestion()
     },
-    correct() {
+    playCorrectSound() {
       const sound = new Howl({
         src: this.correctSoundSrc,
         volume: this.soundVolume
       })
       sound.play()
     },
-    wrong() {
+    playWrongSound() {
       const sound = new Howl({
         src: this.wrongSoundSrc,
         volume: this.soundVolume
@@ -424,7 +452,14 @@ export default {
         })
       }
       if (isCorrect) {
-        this.correct()
+        // 正解音再生
+        this.playCorrectSound()
+
+        // 正解キーの種類別集計
+        if (Object.keys(this.correctKeyTypesCount).includes(this.inputKey)) {
+          this.correctKeyTypesCount[this.inputKey] ++
+        }
+
         let i = 0
         while (i < curArr.length) {
           if (this.inputKey === curArr[i][0]) {
@@ -464,7 +499,7 @@ export default {
           this.correctKeyCountNormal++
         }
       } else {
-        this.wrong()
+        this.playWrongSound()
         this.wrongKeyCount++
       }
     },
@@ -479,7 +514,8 @@ export default {
         bonus_correct: this.correctKeyCountBonus,
         wrong: this.wrongKeyCount,
         accuracy: this.accuracy,
-        score: this.score
+        score: this.score,
+        key_types: this.correctKeyTypesCount
       }
       this.$axios.$post('/results', { result })
         .then((res) => {
