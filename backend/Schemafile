@@ -2,8 +2,8 @@
 # 上のコメント行をつけないと、下の定義の中で日本語が使えません。
 
 # rename_columnの際は既存データを消さないように注意が必要
-# （ridgepoleコマンド実行後は消していい）
 # t.string "new_column", renamed_from: "old_column"
+# （ridgepoleコマンド実行後は消していい）
 
 # unsined: true => 負の数を扱わない整数に限定する場合につける
 
@@ -26,34 +26,64 @@ create_table "genres", id: :bigint, unsigned: true, comment: "ジャンル", for
   t.datetime "deleted_at"
 end
 
+create_table "mission_categories", id: :bigint, unsigned: true, comment: "ミッションのカテゴリー", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  t.string "name", null: false
+  t.string "key", null: false
+  t.integer "parent_id", comment: "同テーブルの親となるカテゴリーID"
+  t.integer "sort_num"
+  t.datetime "updated_at", null: false
+  t.datetime "created_at", null: false
+  t.datetime "deleted_at"
+end
+
+create_table "missions", id: :bigint, unsigned: true, comment: "ミッション", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  t.string "name", null: false
+  t.integer "category_id", comment: "カテゴリー(mission_categories)ID"
+  t.integer "parent_id", comment: "同テーブルの直前のミッションID"
+  t.integer "sort_num"
+  t.datetime "updated_at", null: false
+  t.datetime "created_at", null: false
+  t.datetime "deleted_at"
+end
+
+create_table "user_missions", id: :bigint, unsigned: true, comment: "ユーザーのミッション管理", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  t.integer "user_id", comment: "ユーザー(users)ID"
+  t.integer "mission_id", comment: "ミッション(missions)ID"
+  t.datetime "cleared_at", comment: "クリア時刻"
+  t.datetime "readed_at", comment: "既読時刻"
+  t.datetime "updated_at", null: false
+  t.datetime "created_at", null: false
+  t.datetime "deleted_at"
+end
+
 create_table "play_logs", id: :bigint, unsigned: true, comment: "プレイログ", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
   t.integer "user_id", comment: "ユーザー(users)ID"
-  t.integer "a_key_count", default: 0, comment: "「a」キーのタイプ数"
-  t.integer "b_key_count", default: 0, comment: "「b」キーのタイプ数"
-  t.integer "c_key_count", default: 0, comment: "「c」キーのタイプ数"
-  t.integer "d_key_count", default: 0, comment: "「d」キーのタイプ数"
-  t.integer "e_key_count", default: 0, comment: "「e」キーのタイプ数"
-  t.integer "f_key_count", default: 0, comment: "「f」キーのタイプ数"
-  t.integer "g_key_count", default: 0, comment: "「g」キーのタイプ数"
-  t.integer "h_key_count", default: 0, comment: "「h」キーのタイプ数"
-  t.integer "i_key_count", default: 0, comment: "「i」キーのタイプ数"
-  t.integer "j_key_count", default: 0, comment: "「j」キーのタイプ数"
-  t.integer "k_key_count", default: 0, comment: "「k」キーのタイプ数"
-  t.integer "l_key_count", default: 0, comment: "「l」キーのタイプ数"
-  t.integer "m_key_count", default: 0, comment: "「m」キーのタイプ数"
-  t.integer "n_key_count", default: 0, comment: "「n」キーのタイプ数"
-  t.integer "o_key_count", default: 0, comment: "「o」キーのタイプ数"
-  t.integer "p_key_count", default: 0, comment: "「p」キーのタイプ数"
-  t.integer "q_key_count", default: 0, comment: "「q」キーのタイプ数"
-  t.integer "r_key_count", default: 0, comment: "「r」キーのタイプ数"
-  t.integer "s_key_count", default: 0, comment: "「s」キーのタイプ数"
-  t.integer "t_key_count", default: 0, comment: "「t」キーのタイプ数"
-  t.integer "u_key_count", default: 0, comment: "「u」キーのタイプ数"
-  t.integer "v_key_count", default: 0, comment: "「v」キーのタイプ数"
-  t.integer "w_key_count", default: 0, comment: "「w」キーのタイプ数"
-  t.integer "x_key_count", default: 0, comment: "「x」キーのタイプ数"
-  t.integer "y_key_count", default: 0, comment: "「y」キーのタイプ数"
-  t.integer "z_key_count", default: 0, comment: "「z」キーのタイプ数"
+  t.integer "key_count_a", default: 0, comment: "「a」キーのタイプ数"
+  t.integer "key_count_b", default: 0, comment: "「b」キーのタイプ数"
+  t.integer "key_count_c", default: 0, comment: "「c」キーのタイプ数"
+  t.integer "key_count_d", default: 0, comment: "「d」キーのタイプ数"
+  t.integer "key_count_e", default: 0, comment: "「e」キーのタイプ数"
+  t.integer "key_count_f", default: 0, comment: "「f」キーのタイプ数"
+  t.integer "key_count_g", default: 0, comment: "「g」キーのタイプ数"
+  t.integer "key_count_h", default: 0, comment: "「h」キーのタイプ数"
+  t.integer "key_count_i", default: 0, comment: "「i」キーのタイプ数"
+  t.integer "key_count_j", default: 0, comment: "「j」キーのタイプ数"
+  t.integer "key_count_k", default: 0, comment: "「k」キーのタイプ数"
+  t.integer "key_count_l", default: 0, comment: "「l」キーのタイプ数"
+  t.integer "key_count_m", default: 0, comment: "「m」キーのタイプ数"
+  t.integer "key_count_n", default: 0, comment: "「n」キーのタイプ数"
+  t.integer "key_count_o", default: 0, comment: "「o」キーのタイプ数"
+  t.integer "key_count_p", default: 0, comment: "「p」キーのタイプ数"
+  t.integer "key_count_q", default: 0, comment: "「q」キーのタイプ数"
+  t.integer "key_count_r", default: 0, comment: "「r」キーのタイプ数"
+  t.integer "key_count_s", default: 0, comment: "「s」キーのタイプ数"
+  t.integer "key_count_t", default: 0, comment: "「t」キーのタイプ数"
+  t.integer "key_count_u", default: 0, comment: "「u」キーのタイプ数"
+  t.integer "key_count_v", default: 0, comment: "「v」キーのタイプ数"
+  t.integer "key_count_w", default: 0, comment: "「w」キーのタイプ数"
+  t.integer "key_count_x", default: 0, comment: "「x」キーのタイプ数"
+  t.integer "key_count_y", default: 0, comment: "「y」キーのタイプ数"
+  t.integer "key_count_z", default: 0, comment: "「z」キーのタイプ数"
   t.datetime "updated_at", null: false
   t.datetime "created_at", null: false
   t.datetime "deleted_at"

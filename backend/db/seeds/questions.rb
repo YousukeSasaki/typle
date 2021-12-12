@@ -1,6 +1,4 @@
-if Rails.env.development? || Rails.env.test?
-  ActiveRecord::Base.connection.execute('TRUNCATE TABLE questions')
-end
+return if Rails.env.production? && MissionCategory.count.zero?
 
 lists = [
   # エンジニア
@@ -51,11 +49,15 @@ lists = [
 ]
 
 lists.each do |list|
-  Question.create(
+  question = Question.find_or_initialize_by(
     preview: list[:preview],
     kana: list[:kana],
-    kana_length: list[:kana].length,
-    user_id: list[:user_id],
-    genre_id: list[:genre_id]
+    kana_length: list[:kana].length
   )
+
+  next if question.created_at.present?
+
+  question.user_id = list[:user_id]
+  question.genre_id = list[:genre_id]
+  question.save
 end

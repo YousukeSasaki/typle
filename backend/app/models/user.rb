@@ -1,5 +1,7 @@
 class User < ApplicationRecord
   has_many :results
+  has_many :user_missions
+  has_many :missions, through: :user_missions
   has_one :exp
   has_one :play_log
 

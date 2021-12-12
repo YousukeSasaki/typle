@@ -3,7 +3,7 @@ class PlayLog < ApplicationRecord
 
   def update_log(key_types)
     key_types.each do |key, value|
-      column = "#{key}_key_count".to_sym
+      column = "key_count_#{key}".to_sym
       self[column] += value
     end
 
