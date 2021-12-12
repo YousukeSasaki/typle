@@ -5,6 +5,10 @@
     "activityBar.background": "#41B883",
     "activityBar.foreground": "#ffffff",
     "activityBar.inactiveForeground": "#f0dddd",
-    "activityBarBadge.background": "#000000"
+    "activityBarBadge.background": "#000000",
+    "statusBar.background": "#198353",
   },
+  "eslint.workingDirectories": [
+    "./frontend"
+  ],
 }
