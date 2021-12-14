@@ -28,8 +28,8 @@ end
 
 create_table "mission_categories", id: :bigint, unsigned: true, comment: "ミッションのカテゴリー", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
   t.string "name", null: false
-  t.string "key", null: false
-  t.integer "parent_id", comment: "同テーブルの親となるカテゴリーID"
+  t.string "keyword", null: false
+  t.string "ancestry", comment: "同テーブルの親となるカテゴリーID"
   t.integer "sort_num"
   t.datetime "updated_at", null: false
   t.datetime "created_at", null: false
@@ -38,8 +38,8 @@ end
 
 create_table "missions", id: :bigint, unsigned: true, comment: "ミッション", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
   t.string "name", null: false
+  t.string "keyword", null: false
   t.integer "category_id", comment: "カテゴリー(mission_categories)ID"
-  t.integer "parent_id", comment: "同テーブルの直前のミッションID"
   t.integer "sort_num"
   t.datetime "updated_at", null: false
   t.datetime "created_at", null: false
