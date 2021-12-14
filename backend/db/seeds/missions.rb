@@ -2,13 +2,17 @@ return if Rails.env.production? && MissionCategory.count.positive?
 
 ActiveRecord::Base.connection.execute('TRUNCATE TABLE missions')
 
+def add_comma(num)
+  num.to_s.reverse.scan(/.{1,3}/).join(',').reverse
+end
+
 # TODO: DRYじゃないのでまとめたい
 MissionCategory.roots.each do |root|
   case root.keyword
   when 'key_count'
     nums1 = [100, 300, 500]
-    nums2 = (1..10).to_a.map { |n| n * 1_000 } # 1_000, 2_000, ... , 10_000
-    nums3 = (6..25).to_a.map { |n| n * 2_000 } # 12_000, 14_000, ... , 50_000
+    nums2 = (1..10).to_a.map { |n| add_comma(n * 1_000) } # 1_000, 2_000, ... , 10_000
+    nums3 = (6..25).to_a.map { |n| add_comma(n * 2_000) } # 12_000, 14_000, ... , 50_000
     numbers = nums1 + nums2 + nums3
 
     root.children.each do |child|
@@ -33,9 +37,9 @@ MissionCategory.roots.each do |root|
     end
   when 'play_count'
     num1 = [1, 3, 5]
-    num2 = (2..10).to_a.map { |n| n * 5 } # 10, 15, ... , 50
-    num3 = (6..10).to_a.map { |n| n * 10 } # 60, 70, ... , 100
-    num4 = (6..50).to_a.map { |n| n * 20 } # 120, 140, ... , 1_000
+    num2 = (2..10).to_a.map { |n| add_comma(n * 5) } # 10, 15, ... , 50
+    num3 = (6..10).to_a.map { |n| add_comma(n * 10) } # 60, 70, ... , 100
+    num4 = (6..50).to_a.map { |n| add_comma(n * 20) } # 120, 140, ... , 1_000
     numbers = num1 + num2 + num3 + num4
 
     root.children.each do |child|
@@ -60,11 +64,11 @@ MissionCategory.roots.each do |root|
     end
   when 'accuracy'
     num1 = [1, 3]
-    num2 = (1..10).to_a.map { |n| n * 5 } # 10, 15, ... , 50
-    num3 = (6..10).to_a.map { |n| n * 10 } # 60, 70, ... , 100 ¥100
-    num4 = (11..20).to_a.map { |n| n * 10 } # 110, 120, ... , 200 ¥99 ¥98
-    num5 = (11..15).to_a.map { |n| n * 20 } # 220, 240, ... , 300 ¥97 ¥96 ¥95
-    num6 = (16..25).to_a.map { |n| n * 20 } # 320, 340, ... , 500 ¥90
+    num2 = (1..10).to_a.map { |n| add_comma(n * 5) } # 10, 15, ... , 50
+    num3 = (6..10).to_a.map { |n| add_comma(n * 10) } # 60, 70, ... , 100 ¥100
+    num4 = (11..20).to_a.map { |n| add_comma(n * 10) } # 110, 120, ... , 200 ¥99 ¥98
+    num5 = (11..15).to_a.map { |n| add_comma(n * 20) } # 220, 240, ... , 300 ¥97 ¥96 ¥95
+    num6 = (16..25).to_a.map { |n| add_comma(n * 20) } # 320, 340, ... , 500 ¥90
     num100 = num1 + num2 + num3
     num99 = num100 + num4
     num97 = num99 + num5
