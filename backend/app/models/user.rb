@@ -17,6 +17,11 @@ class User < ApplicationRecord
         play_log = PlayLog.new(user: user)
         play_log.save!
 
+        # TODO: パフォーマンス改善
+        user_missions = UserMission.unregistered_missions(user)
+        user_missions.each(&:save!)
+
+        # TODO: メールアドレス登録の場合、nameはメールアドレスが入っているため、登録後すぐにアカウント名登録ダイアログを出したい
         user.name = param[:name]
         user.email = param[:email]
         user.save!
